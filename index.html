@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>重复文字生成器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        
+        input[type="text"],
+        input[type="range"],
+        button {
+            display: block;
+            margin-bottom: 20px;
+            padding: 10px;
+            width: 100%;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        
+        #outputTextEl {
+            background-color: #f0f0f0;
+            padding: 10px;
+            font-size: 18px;
+        }
+    </style>
+    <script>
+        let timer;
+        function generateText() {
+            const text = inputTextEl.value.trim() || '输入重复文本';
+            const repeatCount = +repeatCountEl.value|| 1;
+            const result = text.repeat(repeatCount);
+            outputTextEl.textContent = result;
+            
+            clearTimeout(timer);
+            // 复制到剪贴板
+            navigator.clipboard.writeText(result).then(function() {
+                generateBtnEl.textContent = "成功复制到剪贴板！";
+                timer = setTimeout(()=>{
+                    generateBtnEl.textContent = "生成并复制到剪贴板";
+                }, 1500);
+            }, function(err) {
+                console.error('复制失败:', err);
+            });
+        }
+        function setRepeatCount(value) {
+            repeatCountNumEl.textContent = value;
+        }
+    </script>
+</head>
+<body>
+    <h1>重复文字生成器</h1>
+    <div class="main">
+        <label for="inputTextEl">输入文本</label>
+        <input type="text" id="inputTextEl" placeholder="输入重复文本">
+        <br>
+        <label for="repeatCountEl">
+            重复次数 <b id="repeatCountNumEl">4</b>
+        </label>
+        <input type="range" id="repeatCountEl" min="1" max="100" step="1" value="4" oninput="setRepeatCount(repeatCountEl.value)">
+        <br>
+        <button onclick="generateText()" id="generateBtnEl">生成并复制到剪贴板</button>
+        <p id="outputTextEl"></p>
+        <footer></footer>
+    </div>
+</body>
+</html>
